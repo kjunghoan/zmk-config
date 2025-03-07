@@ -17,6 +17,18 @@
 #define ADJUST  3
 
 / {
+        behaviors {
+            spc_lower: space_lower {
+                compatible = "zmk,behavior-hold-tap";
+                label = "SPACE_LOWER";
+                #binding-cells = <2>;
+                tapping-term-ms = <200>;
+                quick-tap-ms = <0>;
+                flavor = "tap-preferred";
+                bindings = <&mo>, <&kp>;
+            };
+        };
+
         conditional_layers {
             compatible = "zmk,conditional-layers";
             tri_layer {
@@ -33,12 +45,12 @@
 // |  TAB  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U   |  I  |  O  |  P  | BSPC |
 // | CTRL  |  A  |  S  |  D  |  F  |  G  |   |  H  |  J   |  K  |  L  |  ;  |  '   |
 // | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M   |  ,  |  .  |  /  | SHFT |
-//                    | GUI | ALT | SPACE |   | ENT | LWR  | RSE |
+//                    | GUI | ALT | SPACE/LOWER |   | ENT | RAISE | ESC |
                         bindings = <
    &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSPC
    &kp LCTRL &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
    &kp LSHFT &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp RSHFT
-                  &kp LGUI &kp LALT &kp SPACE   &kp RET &mo LOWER &mo RAISE
+                  &kp LGUI &kp LALT &spc_lower LOWER SPACE   &kp RET &mo RAISE &kp ESC
                         >;
                 };
 
@@ -52,7 +64,7 @@
    &kp ESC   &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT    &kp CARET &kp AMPS  &kp ASTRK &kp LPAR  &kp RPAR  &kp BSPC
    &kp LCTRL &kp N1    &kp N2    &kp N3    &kp N4    &kp N5       &kp MINUS &kp EQUAL &kp GRAVE &kp LBKT  &kp RBKT  &kp BSLH
    &kp LSHFT &kp N6    &kp N7    &kp N8    &kp N9    &kp N0       &kp UNDER &kp PLUS  &kp TILDE &kp LBRC  &kp RBRC  &kp PIPE
-                           &kp LGUI  &kp LALT  &kp SPACE          &kp RET   &trans    &trans
+                           &kp LGUI  &kp LALT  &spc_lower LOWER SPACE   &kp RET   &trans    &trans
                         >;
                 };
 
@@ -66,19 +78,19 @@
    &kp ESC   &kp F1    &kp F2    &kp F3    &kp F4    &kp F5       &kp F6    &kp F7    &kp F8    &kp F9    &kp F10   &kp DEL
    &kp LCTRL &kp HOME  &kp PG_DN &kp PG_UP &kp END   &kp F11      &kp F12   &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &kp HOME
    &kp LSHFT &trans    &trans    &trans    &trans    &trans       &trans    &trans    &trans    &trans    &trans    &kp END
-                                &kp LGUI  &kp LALT  &kp SPACE     &kp RET   &trans    &trans
+                                &kp LGUI  &kp LALT  &spc_lower LOWER SPACE     &kp RET   &trans    &trans
                         >;
                 };
 
                 adjust_layer {
 // -----------------------------------------------------------------------------------------
-// |RGB_TOG|RGB_HUI|RGB_SAI|RGB_BRI|RGBEFF+|RGBEFF-|   |RGB_ON |RGB_OFF|     |     |     |RESET |
-// | BTCLR | BT1  | BT2  | BT3  | BT4  |      |   | MUTE | VOL- | VOL+ | PREV| NEXT| PLAY |
+// | TRANS | MUTE | VOL- | VOL+ |     |     |   |     |     |     |     |     |RESET |
+// | BTCLR | BT1  | BT2  | BT3  | BT4  |      |   | PREV | NEXT | PLAY |     |     |     |
 // | BOOT  |OUT_USB|OUT_BLE|     |     |     |   |     |     |     |     |     |     |
 //                    | GUI | ALT | SPACE |   | ENT |     |     |
                         bindings = <
-   &rgb_ug RGB_TOG &rgb_ug RGB_HUI &rgb_ug RGB_SAI &rgb_ug RGB_BRI &rgb_ug RGB_EFF &rgb_ug RGB_EFR    &rgb_ug RGB_ON &rgb_ug RGB_OFF &trans &trans &trans &sys_reset
-   &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &trans    &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PREV &kp C_NEXT &kp C_PP
+   &trans &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &trans &trans    &trans &trans &trans &trans &trans &sys_reset
+   &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &trans    &kp C_PREV &kp C_NEXT &kp C_PP &trans &trans &trans
    &bootloader &out OUT_USB &out OUT_BLE &trans &trans &trans    &trans &trans &trans &trans &trans &trans
                                         &kp LGUI    &kp LALT   &kp SPACE      &kp RET      &trans       &trans
                         >;
